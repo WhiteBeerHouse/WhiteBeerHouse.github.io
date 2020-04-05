@@ -2,8 +2,10 @@
 <search>
   <entry>
     <title>二零贰零年初</title>
-    <url>/2020/04/05/%E4%BA%8C%E9%9B%B6%E8%B4%B0%E9%9B%B6%E5%B9%B4%E5%88%9D/</url>
-    <content><![CDATA[<h2 id="庚子年清明，我把原来jekyll的博客迁到了hexo框架。"><a href="#庚子年清明，我把原来jekyll的博客迁到了hexo框架。" class="headerlink" title="庚子年清明，我把原来jekyll的博客迁到了hexo框架。"></a>庚子年清明，我把原来jekyll的博客迁到了hexo框架。</h2><p>很久之前就想经营一下博客了，在校时苦于任务繁多，迟迟没有动手；如今受疫情影响，赋闲在家，才又拾起了这个想法，开始动手。</p>
+    <url>/2020/03/21/%E4%BA%8C%E9%9B%B6%E8%B4%B0%E9%9B%B6%E5%B9%B4%E5%88%9D/</url>
+    <content><![CDATA[<p>庚子年清明，我把原来jekyll的博客迁到了hexo框架。</p>
+<hr>
+<p>很久之前就想经营一下博客了，在校时苦于任务繁多，迟迟没有动手；如今受疫情影响，赋闲在家，才又拾起了这个想法，开始动手。</p>
 <p>可能待到重新开学后又疏于打理了，但终究迈出了第一步，不是吗？</p>
 <p>这一年想打通一下算法，自己实在是太太太太太菜了，专业又不受重视，只能自己挣扎。希望不是“想”而已。</p>
 <p>所以应该会以记录题目为主吧。</p>
@@ -15,8 +17,40 @@
       </tags>
   </entry>
   <entry>
+    <title>贪心法（一）</title>
+    <url>/2020/03/22/%E8%B4%AA%E5%BF%83%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<p>久仰大名。没想到这么折腾人。先上定义 ↓</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">贪心算法：在对问题求解时，总是做出在当前看来是最好的选择。也就是说，不从整体最优上加以考虑，他所做出的是在某种意义上的局部最优解。</span><br><span class="line"></span><br><span class="line">贪心法的特点：</span><br><span class="line">· 不是对所有问题都能得到整体最优解，关键是贪心策略的选择</span><br><span class="line">· 选择的策略必须具备无后效性，即某个状态以前的过程不会影响以后的状态，只与当前状态有关。</span><br></pre></td></tr></table></figure>
+<p><br/>听起来挺简单对吧，但最优解的策略是真不好找，而且往往需要证明（哪怕不太严谨但也应说服自己信任该策略）。下面给出一个例子。</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">题号：soj <span class="number">1198</span> <span class="comment">--Substring</span></span><br><span class="line">题目：给定n个字符串，将其拼接形成一个字典序最小的字符串（<span class="number">1</span>&lt;=n&lt;=<span class="number">8</span>）</span><br></pre></td></tr></table></figure>
+<p><br/>那么，我们可以考虑以下几种方案：</p>
+<p>– 直接对所有字符串按字典序大小排序后进行拼接。<br/><br>– 暴力枚举所有组合的可能性，再遍历得到字典序最小的组合。<br/><br>– <b>传说中的贪心法</b></p>
+<p>第一种方案咋一看可行，那么考虑这样一个输入：b、ba；按该方案得到的输出是”bba”，但实际上”bab”才是最优解。所以，存在反例，我们可以否定第一种方案。</p>
+<p>显然，暴力枚举是可以得到正确结果的，时间复杂度O(n<sup>2</sup>)，相对于我们将要讨论的贪心法，既费时又费力。（文末会附上暴力枚举方案的代码）。</p>
+<p>那么，在这个题目中贪心法的策略是如何呢？</p>
+<p>合理的做法是先对这n个字符串进行某种<b>排序</b>再拼接。这里的排序方式是指，对于两个字符串str1、str2，如果str1+str2 &lt; str2+str1，那么把str1放在str2的前面所得到的字符串就是字典序更小的那个。当每两个字符串之间都按照这个标准进行比较并排序后，最终串起来的结果就是正确答案。</p>
+<p>该策略证明如下：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">证题：若a &lt;= b，b &lt;= c，那么a &lt;= c(已重载比较符)。</span><br><span class="line">证明：</span><br><span class="line">    由 a &lt;= b 得 ab &lt;= ba； </span><br><span class="line">    由 b &lt;= c 得 bc &lt;= cb；</span><br><span class="line">    易得 ac &lt;= ca，推出a &lt;= c。证毕。</span><br></pre></td></tr></table></figure>
+<p><br/>证明完成，将上述思想转化为代码。</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">bool</span> cmp(string str1, string str2)&#123;</span><br><span class="line">	return str1+str2 &lt; str2+str1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title">string</span> subStr(int n, string str[])&#123;</span><br><span class="line">	string ret = <span class="string">""</span>;</span><br><span class="line">	sort(str, str+n, cmp);</span><br><span class="line">	for (int i = <span class="number">0</span>; i &lt; n; ++i)&#123;</span><br><span class="line">		ret += str[i];</span><br><span class="line">	&#125;</span><br><span class="line">	return ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例题写得略长了，之后的题目就点到为止吧。</p>
+<p>（未完待续）</p>
+<p>附录：</p>
+<p><a href="https://blog.csdn.net/weixin_43864929/article/details/105039150" target="_blank" rel="noopener">求字典序最小的拼接字符串之暴力枚举法</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>贪心法</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>贪心法（二）</title>
-    <url>/2020/04/05/%E8%B4%AA%E5%BF%83%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <url>/2020/03/28/%E8%B4%AA%E5%BF%83%E6%B3%95%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
     <content><![CDATA[<p><a href="#1035">soj 1035 –DNA matching</a><br><a href="#1681">soj 1681 –Matchsticks</a><br><a href="#1620">soj 1620 –SCVs and minerals</a><br><a href="#2503">soj 2503 –最长字符串</a><br><a href="#1783">soj 1783 –Large is Better</a><br><a href="#8536">soj 8536 –Happy Camper</a><br><a href="#6771">soj 6771 –Class Packing</a></p>
 <hr>
 <p>⭐⭐⭐<a name="1035"></a></p>
@@ -64,38 +98,6 @@
 <p>（未完待续）</p>
 <p>附录：</p>
 <p><a href="https://blog.csdn.net/qq_28351609/article/details/84630535" target="_blank" rel="noopener">STL之map用法详解</a><br><a href="https://blog.csdn.net/sodacoco/article/details/84798621" target="_blank" rel="noopener">STL之multiset用法总结</a><br><a href="http://c.biancheng.net/view/545.html" target="_blank" rel="noopener">Multiset用法详解</a></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>贪心法</tag>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>贪心法（一）</title>
-    <url>/2020/04/05/%E8%B4%AA%E5%BF%83%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<p>久仰大名。没想到这么折腾人。先上定义 ↓</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">贪心算法：在对问题求解时，总是做出在当前看来是最好的选择。也就是说，不从整体最优上加以考虑，他所做出的是在某种意义上的局部最优解。</span><br><span class="line"></span><br><span class="line">贪心法的特点：</span><br><span class="line">· 不是对所有问题都能得到整体最优解，关键是贪心策略的选择</span><br><span class="line">· 选择的策略必须具备无后效性，即某个状态以前的过程不会影响以后的状态，只与当前状态有关。</span><br></pre></td></tr></table></figure>
-<p><br/>听起来挺简单对吧，但最优解的策略是真不好找，而且往往需要证明（哪怕不太严谨但也应说服自己信任该策略）。下面给出一个例子。</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">题号：soj <span class="number">1198</span> <span class="comment">--Substring</span></span><br><span class="line">题目：给定n个字符串，将其拼接形成一个字典序最小的字符串（<span class="number">1</span>&lt;=n&lt;=<span class="number">8</span>）</span><br></pre></td></tr></table></figure>
-<p><br/>那么，我们可以考虑以下几种方案：</p>
-<p>– 直接对所有字符串按字典序大小排序后进行拼接。<br/><br>– 暴力枚举所有组合的可能性，再遍历得到字典序最小的组合。<br/><br>– <b>传说中的贪心法</b></p>
-<p>第一种方案咋一看可行，那么考虑这样一个输入：b、ba；按该方案得到的输出是”bba”，但实际上”bab”才是最优解。所以，存在反例，我们可以否定第一种方案。</p>
-<p>显然，暴力枚举是可以得到正确结果的，时间复杂度O(n<sup>2</sup>)，相对于我们将要讨论的贪心法，既费时又费力。（文末会附上暴力枚举方案的代码）。</p>
-<p>那么，在这个题目中贪心法的策略是如何呢？</p>
-<p>合理的做法是先对这n个字符串进行某种<b>排序</b>再拼接。这里的排序方式是指，对于两个字符串str1、str2，如果str1+str2 &lt; str2+str1，那么把str1放在str2的前面所得到的字符串就是字典序更小的那个。当每两个字符串之间都按照这个标准进行比较并排序后，最终串起来的结果就是正确答案。</p>
-<p>该策略证明如下：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">证题：若a &lt;= b，b &lt;= c，那么a &lt;= c(已重载比较符)。</span><br><span class="line">证明：</span><br><span class="line">    由 a &lt;= b 得 ab &lt;= ba； </span><br><span class="line">    由 b &lt;= c 得 bc &lt;= cb；</span><br><span class="line">    易得 ac &lt;= ca，推出a &lt;= c。证毕。</span><br></pre></td></tr></table></figure>
-<p><br/>证明完成，将上述思想转化为代码。</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">bool</span> cmp(string str1, string str2)&#123;</span><br><span class="line">	return str1+str2 &lt; str2+str1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title">string</span> subStr(int n, string str[])&#123;</span><br><span class="line">	string ret = <span class="string">""</span>;</span><br><span class="line">	sort(str, str+n, cmp);</span><br><span class="line">	for (int i = <span class="number">0</span>; i &lt; n; ++i)&#123;</span><br><span class="line">		ret += str[i];</span><br><span class="line">	&#125;</span><br><span class="line">	return ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>例题写得略长了，之后的题目就点到为止吧。</p>
-<p>（未完待续）</p>
-<p>附录：</p>
-<p><a href="https://blog.csdn.net/weixin_43864929/article/details/105039150" target="_blank" rel="noopener">求字典序最小的拼接字符串之暴力枚举法</a></p>
 ]]></content>
       <categories>
         <category>算法</category>
