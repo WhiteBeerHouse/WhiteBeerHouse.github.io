@@ -1,70 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>我的博客经营旅程</title>
-    <url>/2020/03/21/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2%E7%BB%8F%E8%90%A5%E6%97%85%E7%A8%8B/</url>
-    <content><![CDATA[<p>庚子年清明，我把原来jekyll的博客迁到了hexo框架。</p>
-<p>主题©<a href="https://jerryc.me/" target="_blank" rel="noopener">Butterfly</a>，目前只是根据配置文档做一些选择，尽量让界面清新简洁。</p>
-<p>大佬们代码写得很好，得花一些时间研究一下配置文件，未来想再引进些什么。</p>
-<p>未完待续…</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>碎碎念</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>动态规划（二）</title>
-    <url>/2020/04/10/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
-    <content><![CDATA[<p><a href="#1121">soj 1121 –Tri Tiling</a><br><a href="#1828">soj 1828 –Minimal</a></p>
-<hr>
-<p>⭐⭐⭐⭐<a name="1121"></a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">题号：soj 1121 --Tri Tiling</span><br><span class="line">题目：用1*2的长方形铺满3*n的长方形，有多少种方法？（如下图）</span><br></pre></td></tr></table></figure>
-<p><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-0.png"  alt=""><br/></p>
-<p>画图是最直截了当的解题关键：n=2时，可以平铺出矩形（3种情况）和非矩形（2种情况），如下图所示。<br/><br><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-1.jpg"  alt=""><br/><br><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-2.jpg"  alt=""><br><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-3.jpg"  alt=""><br/><br>那么可以转化为:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">要使3*n是一个矩形，有两种可能:</span><br><span class="line">    1. 3*(n-2)也是一个矩形，那么只要再拼上一个3*2的就可以了。这个3*2有3种情况,所以是3*f(n-2);</span><br><span class="line"></span><br><span class="line">    2. 3*(n-2)不是一个矩形，这种情况下，你只有一种添加2*1块的方法使得3*n是矩形，还需要对3*(n-4)的形状做判断：</span><br><span class="line"></span><br><span class="line">        1. 3*(n-4)是一个矩形，那么只要再拼一个L形或者倒L形就可以使得3*(n-2)不是矩形了，这里就是2*f(n-4);</span><br><span class="line"></span><br><span class="line">        2. 3*(n-4)不是一个矩形，那么也是只有一种添加2*1块的方法能使3*(n-2)不是矩形，接下来就来考虑3*(n-6)：</span><br><span class="line"></span><br><span class="line">             1. 3*(n-6)是一个矩形，那么只要再拼一个L形或者倒L形就可以使得3*(n-4)不是矩形了，这里就是2*f(n-6);</span><br><span class="line"></span><br><span class="line">             2. 3*(n-6)不是一个矩形，……</span><br></pre></td></tr></table></figure>
-<p>综上，可以得到递推式：<strong>f(n) = 3 * f(n-2) + 2 * f(n-4) + 2 * f(n-6) + … + 2 * f(0)</strong>，其中初始值<strong>f(0)=1</strong>。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">const int maxn &#x3D; 30;</span><br><span class="line">int f[maxn] &#x3D; &#123;0&#125;;</span><br><span class="line"></span><br><span class="line">int dp(int n) &#123;</span><br><span class="line">	if (n % 2 &#x3D;&#x3D; 1)	return 0;</span><br><span class="line">	if (n &#x3D;&#x3D; 0)	return f[0] &#x3D; 1;</span><br><span class="line">	if (n &#x3D;&#x3D; 2)	return f[2] &#x3D; 3;</span><br><span class="line">	if (f[n] !&#x3D; 0)	return f[n];</span><br><span class="line">	f[n] +&#x3D; 3 * dp(n - 2);</span><br><span class="line">	for (int i &#x3D; 2; i &lt;&#x3D; n&#x2F;2; ++i) &#123;</span><br><span class="line">		f[n] +&#x3D; 2 * dp(n - 2 * i);</span><br><span class="line">	&#125;</span><br><span class="line">	return f[n];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	int n;</span><br><span class="line">	while (cin &gt;&gt; n &amp;&amp; n !&#x3D; -1) &#123;</span><br><span class="line">		cout &lt;&lt; dp(n) &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>⭐⭐⭐<a name="1828"></a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">题号：soj 1828 --Minimal</span><br><span class="line">题目：There are two sets S1 and S2 subjecting to:</span><br><span class="line">(1) S1, S2 are both the subsets of &#123;x| x is an integer and 0 &lt; x &lt; 1,000,000&#125;</span><br><span class="line">(2) 0 &lt; |S1| &lt; |S2| &lt; 500</span><br><span class="line"> </span><br><span class="line">F(S1, S2) &#x3D; min &#123;|a1-b1| + |a2-b2| + … + |aN-bN|&#125; in which ai ∈S1, bi ∈S2, ai ≠aj if i≠j, bi ≠bj if i≠j (i, j &#x3D; 1, 2 … N，N &#x3D; |S1|)</span><br><span class="line"></span><br><span class="line">For each test case, print the result of F(S1 ,S2).</span><br></pre></td></tr></table></figure>
-<p>最开始我的想法是，将S1和S2作笛卡尔积（定义X为两数差距），在一个二维数组里记录两两之差的绝对值，对S1每个元素都匹配以S2某个元素使得差距尽可能小。<strong>尝试了几个测例都过了，但是OJ上面WA了，这个解法个人觉得也有些牵强，无法证明，但又无法证伪😭。</strong><br/><br><font color='gray'>&lt; 以下解释参考相关资料信息 &gt;</font><br/><br>假设我们从S2中选择了某些数，假设选出的数组成S3，那么S3中最小的数肯定匹配S1中最小的数，S3中次小的数匹配S1中次小的数…</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">证明：</span><br><span class="line">假设S1中有了a1,a2,S3中有b1,b2</span><br><span class="line">且a1&lt;&#x3D;a2,b1&lt;&#x3D;b2</span><br><span class="line">那么有|a1-b1|+|a2-b2|&lt;&#x3D;|a1-b2|+|a2-b1|（数学问题）</span><br><span class="line">所以从小到大一个个匹配不会更差，只会更好。</span><br></pre></td></tr></table></figure>
-<p><strong>解法：</strong><br>对S1和S2分别从小到大排序，用f[i][j]表示S1中的前i个数，与S2中的前j个数匹配（从j个数选i个数出来），显然有：<br/></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">f[i][j] &#x3D; inf(j &lt; i)</span><br><span class="line">f[0][0] &#x3D; 0</span><br><span class="line">f[i][j] &#x3D; min&#123;f[i-1][j-1]+|a[i]-b[j]|,f[i][j-1]&#125;,j&gt;&#x3D;i</span><br></pre></td></tr></table></figure>
-<p>代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;algorithm&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">#define inf 1&lt;&lt;30</span><br><span class="line">const int maxn &#x3D; 501;</span><br><span class="line">int f[maxn][maxn];</span><br><span class="line">int S1[maxn], S2[maxn];</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	int cases;</span><br><span class="line">	cin &gt;&gt; cases;</span><br><span class="line">	while (cases--) &#123;</span><br><span class="line">		int N, M;</span><br><span class="line">		cin &gt;&gt; N &gt;&gt; M;</span><br><span class="line">		for (int i &#x3D; 1; i &lt;&#x3D; N; ++i) &#123;</span><br><span class="line">			cin &gt;&gt; S1[i];</span><br><span class="line">		&#125;</span><br><span class="line">		for (int i &#x3D; 1; i &lt;&#x3D; M; ++i) &#123;</span><br><span class="line">			cin &gt;&gt; S2[i];</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		sort(S1+1, S1+N+1);</span><br><span class="line">		sort(S2+1, S2+M+1);</span><br><span class="line">		for (int i &#x3D; 0; i &lt;&#x3D; N; ++i) &#123;</span><br><span class="line">			for (int j &#x3D; 0; j &lt;&#x3D; M; ++j) &#123;</span><br><span class="line">				if (i &#x3D;&#x3D; 0 &amp;&amp; j &#x3D;&#x3D; 0)</span><br><span class="line">					f[i][j] &#x3D; 0;</span><br><span class="line">				else if (i &gt; j) &#123;</span><br><span class="line">					f[i][j] &#x3D; inf;</span><br><span class="line">				&#125;</span><br><span class="line">				else &#123;</span><br><span class="line">					f[i][j] &#x3D; inf;</span><br><span class="line">					if (i &gt; 0)</span><br><span class="line">						f[i][j] &#x3D; min(f[i][j], f[i-1][j-1]+abs(S1[i]-S2[j]));</span><br><span class="line">					if (j &gt; 0)</span><br><span class="line">						f[i][j] &#x3D; min(f[i][j], f[i][j-1]);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cout &lt;&lt; f[N][M] &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>（未完待续）</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>动态规划</tag>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode-329 判断子序列</title>
-    <url>/2020/04/08/LeetCode-329-%E5%88%A4%E6%96%AD%E5%AD%90%E5%BA%8F%E5%88%97/</url>
-    <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">给定字符串 s 和 t ，判断 s 是否为 t 的子序列。</span><br><span class="line">你可以认为 s 和 t 中仅包含英文小写字母。字符串 t 可能会很长（长度 ~&#x3D; 500,000），而 s 是个短字符串（长度 &lt;&#x3D;100）。</span><br><span class="line">字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，&quot;ace&quot;是&quot;abcde&quot;的一个子序列，而&quot;aec&quot;不是）。</span><br><span class="line"></span><br><span class="line">示例 1:</span><br><span class="line">s &#x3D; &quot;abc&quot;, t &#x3D; &quot;ahbgdc&quot;</span><br><span class="line"></span><br><span class="line">返回 true.</span><br><span class="line"></span><br><span class="line">示例 2:</span><br><span class="line">s &#x3D; &quot;axc&quot;, t &#x3D; &quot;ahbgdc&quot;</span><br><span class="line"></span><br><span class="line">返回 false.</span><br></pre></td></tr></table></figure>
-<br/>
-
-<h2 id="📝思路"><a href="#📝思路" class="headerlink" title="📝思路"></a><strong>📝思路</strong></h2><p>注意，字符串t可能很长，所以不适合用下标去标记和遍历（大概率会溢出）。<br/>使用<strong>双指针</strong>方式进行遍历，判断方式以<strong>字符串s是否遍历完</strong>为标准。<br><br/></p>
-<h2 id="📝题解"><a href="#📝题解" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool isSubsequence(string s, string t) &#123;</span><br><span class="line">    char* spt &#x3D; &amp;s[0];</span><br><span class="line">    char* tpt &#x3D; &amp;t[0];</span><br><span class="line">    while(*spt &amp;&amp; *tpt)&#123;</span><br><span class="line">        if (*spt &#x3D;&#x3D; *tpt)   spt++;</span><br><span class="line">        tpt++;</span><br><span class="line">    &#125;</span><br><span class="line">    return (*spt &#x3D;&#x3D; &#39;\0&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>C++</tag>
-        <tag>LeetCode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>动态规划（一）</title>
     <url>/2020/04/07/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E4%B8%80%EF%BC%89/</url>
     <content><![CDATA[<h2 id="📝算法介绍"><a href="#📝算法介绍" class="headerlink" title="📝算法介绍"></a><strong>📝算法介绍</strong></h2><p><strong>动态规划</strong>（Dynamic programming）常常适用于有重叠子问题和最优子结构性质的问题，动态规划方法所耗时间往往远少于朴素解法。<br/><br>动态规划背后的基本思想非常简单。大致上，若要解一个给定问题，我们需要解其不同部分（即子问题），再根据子问题的解以得出原问题的解。动态规划往往用于<strong>优化递归问题</strong>，例如斐波那契数列，如果运用递归的方式来求解会重复计算很多相同的子问题，利用动态规划的思想可以减少计算量。<br/><br>通常许多子问题非常相似，为此动态规划法试图仅仅解决每个子问题一次，具有天然剪枝的功能，从而减少计算量：一旦某个给定子问题的解已经算出，则将其<strong>记忆化存储</strong>，以便下次需要同一个子问题解之时直接查表。这种做法在重复子问题的数目关于输入的规模呈指数增长时特别有用。<br/></p>
@@ -93,6 +29,54 @@
         <tag>算法</tag>
         <tag>动态规划</tag>
         <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>我的博客经营旅程</title>
+    <url>/2020/03/21/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2%E7%BB%8F%E8%90%A5%E6%97%85%E7%A8%8B/</url>
+    <content><![CDATA[<p>庚子年清明，我把原来jekyll的博客迁到了hexo框架。</p>
+<p>主题©<a href="https://jerryc.me/" target="_blank" rel="noopener">Butterfly</a>，目前只是根据配置文档做一些选择，尽量让界面清新简洁。</p>
+<p>大佬们代码写得很好，得花一些时间研究一下配置文件，未来想再引进些什么。</p>
+<p>未完待续…</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>碎碎念</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>贪心法（一）</title>
+    <url>/2020/03/22/%E8%B4%AA%E5%BF%83%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<p>久仰大名。没想到这么折腾人。先上定义 ↓</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">贪心算法：在对问题求解时，总是做出在当前看来是最好的选择。也就是说，不从整体最优上加以考虑，他所做出的是在某种意义上的局部最优解。</span><br><span class="line"></span><br><span class="line">贪心法的特点：</span><br><span class="line">· 不是对所有问题都能得到整体最优解，关键是贪心策略的选择</span><br><span class="line">· 选择的策略必须具备无后效性，即某个状态以前的过程不会影响以后的状态，只与当前状态有关。</span><br></pre></td></tr></table></figure>
+<p><br/>听起来挺简单对吧，但最优解的策略是真不好找，而且往往需要证明（哪怕不太严谨但也应说服自己信任该策略）。下面给出一个例子。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">题号：soj 1198 --Substring</span><br><span class="line">题目：给定n个字符串，将其拼接形成一个字典序最小的字符串（1&lt;&#x3D;n&lt;&#x3D;8）</span><br></pre></td></tr></table></figure>
+<p><br/>那么，我们可以考虑以下几种方案：</p>
+<ul>
+<li>直接对所有字符串按字典序大小排序后进行拼接。<br/></li>
+<li>暴力枚举所有组合的可能性，再遍历得到字典序最小的组合。<br/></li>
+<li><strong>传说中的贪心法</strong></li>
+</ul>
+<p>第一种方案咋一看可行，那么考虑这样一个输入：b、ba；按该方案得到的输出是”bba”，但实际上”bab”才是最优解。所以，存在反例，我们可以否定第一种方案。</p>
+<p>显然，暴力枚举是可以得到正确结果的，时间复杂度O(n<sup>2</sup>)，相对于我们将要讨论的贪心法，既费时又费力。（文末会附上暴力枚举方案的代码）。</p>
+<p>那么，在这个题目中贪心法的策略是如何呢？</p>
+<p>合理的做法是先对这n个字符串进行某种<b>排序</b>再拼接。这里的排序方式是指，对于两个字符串str1、str2，如果str1+str2 &lt; str2+str1，那么把str1放在str2的前面所得到的字符串就是字典序更小的那个。当每两个字符串之间都按照这个标准进行比较并排序后，最终串起来的结果就是正确答案。</p>
+<p>该策略证明如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">证题：若a &lt;&#x3D; b，b &lt;&#x3D; c，那么a &lt;&#x3D; c(已重载比较符)。</span><br><span class="line">证明：</span><br><span class="line">    由 a &lt;&#x3D; b 得 ab &lt;&#x3D; ba； </span><br><span class="line">    由 b &lt;&#x3D; c 得 bc &lt;&#x3D; cb；</span><br><span class="line">    易得 ac &lt;&#x3D; ca，推出a &lt;&#x3D; c。证毕。</span><br></pre></td></tr></table></figure>
+<p><br/>证明完成，将上述思想转化为代码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool cmp(string str1, string str2)&#123;</span><br><span class="line">	return str1+str2 &lt; str2+str1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">string subStr(int n, string str[])&#123;</span><br><span class="line">	string ret &#x3D; &quot;&quot;;</span><br><span class="line">	sort(str, str+n, cmp);</span><br><span class="line">	for (int i &#x3D; 0; i &lt; n; ++i)&#123;</span><br><span class="line">		ret +&#x3D; str[i];</span><br><span class="line">	&#125;</span><br><span class="line">	return ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例题写得略长了，之后的题目就点到为止吧。</p>
+<p>附录：</p>
+<p><a href="https://blog.csdn.net/weixin_43864929/article/details/105039150" target="_blank" rel="noopener">求字典序最小的拼接字符串之暴力枚举法</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>C++</tag>
+        <tag>贪心法</tag>
       </tags>
   </entry>
   <entry>
@@ -156,38 +140,71 @@
       </tags>
   </entry>
   <entry>
-    <title>贪心法（一）</title>
-    <url>/2020/03/22/%E8%B4%AA%E5%BF%83%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<p>久仰大名。没想到这么折腾人。先上定义 ↓</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">贪心算法：在对问题求解时，总是做出在当前看来是最好的选择。也就是说，不从整体最优上加以考虑，他所做出的是在某种意义上的局部最优解。</span><br><span class="line"></span><br><span class="line">贪心法的特点：</span><br><span class="line">· 不是对所有问题都能得到整体最优解，关键是贪心策略的选择</span><br><span class="line">· 选择的策略必须具备无后效性，即某个状态以前的过程不会影响以后的状态，只与当前状态有关。</span><br></pre></td></tr></table></figure>
-<p><br/>听起来挺简单对吧，但最优解的策略是真不好找，而且往往需要证明（哪怕不太严谨但也应说服自己信任该策略）。下面给出一个例子。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">题号：soj 1198 --Substring</span><br><span class="line">题目：给定n个字符串，将其拼接形成一个字典序最小的字符串（1&lt;&#x3D;n&lt;&#x3D;8）</span><br></pre></td></tr></table></figure>
-<p><br/>那么，我们可以考虑以下几种方案：</p>
-<ul>
-<li>直接对所有字符串按字典序大小排序后进行拼接。<br/></li>
-<li>暴力枚举所有组合的可能性，再遍历得到字典序最小的组合。<br/></li>
-<li><strong>传说中的贪心法</strong></li>
-</ul>
-<p>第一种方案咋一看可行，那么考虑这样一个输入：b、ba；按该方案得到的输出是”bba”，但实际上”bab”才是最优解。所以，存在反例，我们可以否定第一种方案。</p>
-<p>显然，暴力枚举是可以得到正确结果的，时间复杂度O(n<sup>2</sup>)，相对于我们将要讨论的贪心法，既费时又费力。（文末会附上暴力枚举方案的代码）。</p>
-<p>那么，在这个题目中贪心法的策略是如何呢？</p>
-<p>合理的做法是先对这n个字符串进行某种<b>排序</b>再拼接。这里的排序方式是指，对于两个字符串str1、str2，如果str1+str2 &lt; str2+str1，那么把str1放在str2的前面所得到的字符串就是字典序更小的那个。当每两个字符串之间都按照这个标准进行比较并排序后，最终串起来的结果就是正确答案。</p>
-<p>该策略证明如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">证题：若a &lt;&#x3D; b，b &lt;&#x3D; c，那么a &lt;&#x3D; c(已重载比较符)。</span><br><span class="line">证明：</span><br><span class="line">    由 a &lt;&#x3D; b 得 ab &lt;&#x3D; ba； </span><br><span class="line">    由 b &lt;&#x3D; c 得 bc &lt;&#x3D; cb；</span><br><span class="line">    易得 ac &lt;&#x3D; ca，推出a &lt;&#x3D; c。证毕。</span><br></pre></td></tr></table></figure>
-<p><br/>证明完成，将上述思想转化为代码。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool cmp(string str1, string str2)&#123;</span><br><span class="line">	return str1+str2 &lt; str2+str1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">string subStr(int n, string str[])&#123;</span><br><span class="line">	string ret &#x3D; &quot;&quot;;</span><br><span class="line">	sort(str, str+n, cmp);</span><br><span class="line">	for (int i &#x3D; 0; i &lt; n; ++i)&#123;</span><br><span class="line">		ret +&#x3D; str[i];</span><br><span class="line">	&#125;</span><br><span class="line">	return ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>LeetCode-329 判断子序列</title>
+    <url>/2020/04/08/LeetCode-329-%E5%88%A4%E6%96%AD%E5%AD%90%E5%BA%8F%E5%88%97/</url>
+    <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">给定字符串 s 和 t ，判断 s 是否为 t 的子序列。</span><br><span class="line">你可以认为 s 和 t 中仅包含英文小写字母。字符串 t 可能会很长（长度 ~&#x3D; 500,000），而 s 是个短字符串（长度 &lt;&#x3D;100）。</span><br><span class="line">字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，&quot;ace&quot;是&quot;abcde&quot;的一个子序列，而&quot;aec&quot;不是）。</span><br><span class="line"></span><br><span class="line">示例 1:</span><br><span class="line">s &#x3D; &quot;abc&quot;, t &#x3D; &quot;ahbgdc&quot;</span><br><span class="line"></span><br><span class="line">返回 true.</span><br><span class="line"></span><br><span class="line">示例 2:</span><br><span class="line">s &#x3D; &quot;axc&quot;, t &#x3D; &quot;ahbgdc&quot;</span><br><span class="line"></span><br><span class="line">返回 false.</span><br></pre></td></tr></table></figure>
+<br/>
 
-<p>例题写得略长了，之后的题目就点到为止吧。</p>
-<p>附录：</p>
-<p><a href="https://blog.csdn.net/weixin_43864929/article/details/105039150" target="_blank" rel="noopener">求字典序最小的拼接字符串之暴力枚举法</a></p>
+<h2 id="📝思路"><a href="#📝思路" class="headerlink" title="📝思路"></a><strong>📝思路</strong></h2><p>注意，字符串t可能很长，所以不适合用下标去标记和遍历（大概率会溢出）。<br/>使用<strong>双指针</strong>方式进行遍历，判断方式以<strong>字符串s是否遍历完</strong>为标准。<br><br/></p>
+<h2 id="📝题解"><a href="#📝题解" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool isSubsequence(string s, string t) &#123;</span><br><span class="line">    char* spt &#x3D; &amp;s[0];</span><br><span class="line">    char* tpt &#x3D; &amp;t[0];</span><br><span class="line">    while(*spt &amp;&amp; *tpt)&#123;</span><br><span class="line">        if (*spt &#x3D;&#x3D; *tpt)   spt++;</span><br><span class="line">        tpt++;</span><br><span class="line">    &#125;</span><br><span class="line">    return (*spt &#x3D;&#x3D; &#39;\0&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>C++</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>动态规划（二）</title>
+    <url>/2020/04/10/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<p><a href="#1121">soj 1121 –Tri Tiling</a><br><a href="#1828">soj 1828 –Minimal</a></p>
+<hr>
+<p>⭐⭐⭐⭐<a name="1121"></a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">题号：soj 1121 --Tri Tiling</span><br><span class="line">题目：用1*2的长方形铺满3*n的长方形，有多少种方法？（如下图）</span><br></pre></td></tr></table></figure>
+<p><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-0.png"  alt=""><br/></p>
+<p>画图是最直截了当的解题关键：n=2时，可以平铺出矩形（3种情况）和非矩形（2种情况），如下图所示。<br/><br><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-1.jpg"  alt=""><br/><br><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-2.jpg"  alt=""><br><img src="/" class="lazyload" data-src="https://cdn.jsdelivr.net/gh/sherryjw/StaticResource@v1.0.9/image/1121-3.jpg"  alt=""><br/><br>那么可以转化为:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">要使3*n是一个矩形，有两种可能:</span><br><span class="line">    1. 3*(n-2)也是一个矩形，那么只要再拼上一个3*2的就可以了。这个3*2有3种情况,所以是3*f(n-2);</span><br><span class="line"></span><br><span class="line">    2. 3*(n-2)不是一个矩形，这种情况下，你只有一种添加2*1块的方法使得3*n是矩形，还需要对3*(n-4)的形状做判断：</span><br><span class="line"></span><br><span class="line">        1. 3*(n-4)是一个矩形，那么只要再拼一个L形或者倒L形就可以使得3*(n-2)不是矩形了，这里就是2*f(n-4);</span><br><span class="line"></span><br><span class="line">        2. 3*(n-4)不是一个矩形，那么也是只有一种添加2*1块的方法能使3*(n-2)不是矩形，接下来就来考虑3*(n-6)：</span><br><span class="line"></span><br><span class="line">             1. 3*(n-6)是一个矩形，那么只要再拼一个L形或者倒L形就可以使得3*(n-4)不是矩形了，这里就是2*f(n-6);</span><br><span class="line"></span><br><span class="line">             2. 3*(n-6)不是一个矩形，……</span><br></pre></td></tr></table></figure>
+<p>综上，可以得到递推式：<strong>f(n) = 3 * f(n-2) + 2 * f(n-4) + 2 * f(n-6) + … + 2 * f(0)</strong>，其中初始值<strong>f(0)=1</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">const int maxn &#x3D; 30;</span><br><span class="line">int f[maxn] &#x3D; &#123;0&#125;;</span><br><span class="line"></span><br><span class="line">int dp(int n) &#123;</span><br><span class="line">	if (n % 2 &#x3D;&#x3D; 1)	return 0;</span><br><span class="line">	if (n &#x3D;&#x3D; 0)	return f[0] &#x3D; 1;</span><br><span class="line">	if (n &#x3D;&#x3D; 2)	return f[2] &#x3D; 3;</span><br><span class="line">	if (f[n] !&#x3D; 0)	return f[n];</span><br><span class="line">	f[n] +&#x3D; 3 * dp(n - 2);</span><br><span class="line">	for (int i &#x3D; 2; i &lt;&#x3D; n&#x2F;2; ++i) &#123;</span><br><span class="line">		f[n] +&#x3D; 2 * dp(n - 2 * i);</span><br><span class="line">	&#125;</span><br><span class="line">	return f[n];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	int n;</span><br><span class="line">	while (cin &gt;&gt; n &amp;&amp; n !&#x3D; -1) &#123;</span><br><span class="line">		cout &lt;&lt; dp(n) &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>⭐⭐⭐<a name="1828"></a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">题号：soj 1828 --Minimal</span><br><span class="line">题目：There are two sets S1 and S2 subjecting to:</span><br><span class="line">(1) S1, S2 are both the subsets of &#123;x| x is an integer and 0 &lt; x &lt; 1,000,000&#125;</span><br><span class="line">(2) 0 &lt; |S1| &lt; |S2| &lt; 500</span><br><span class="line"> </span><br><span class="line">F(S1, S2) &#x3D; min &#123;|a1-b1| + |a2-b2| + … + |aN-bN|&#125; in which ai ∈S1, bi ∈S2, ai ≠aj if i≠j, bi ≠bj if i≠j (i, j &#x3D; 1, 2 … N，N &#x3D; |S1|)</span><br><span class="line"></span><br><span class="line">For each test case, print the result of F(S1 ,S2).</span><br></pre></td></tr></table></figure>
+<p>最开始我的想法是，将S1和S2作笛卡尔积（定义X为两数差距），在一个二维数组里记录两两之差的绝对值，对S1每个元素都匹配以S2某个元素使得差距尽可能小。<strong>尝试了几个测例都过了，但是OJ上面WA了，这个解法个人觉得也有些牵强，无法证明，但又无法证伪😭。</strong><br/><br><font color='gray'>&lt; 以下解释参考相关资料信息 &gt;</font><br/><br>假设我们从S2中选择了某些数，假设选出的数组成S3，那么S3中最小的数肯定匹配S1中最小的数，S3中次小的数匹配S1中次小的数…</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">证明：</span><br><span class="line">假设S1中有了a1,a2,S3中有b1,b2</span><br><span class="line">且a1&lt;&#x3D;a2,b1&lt;&#x3D;b2</span><br><span class="line">那么有|a1-b1|+|a2-b2|&lt;&#x3D;|a1-b2|+|a2-b1|（数学问题）</span><br><span class="line">所以从小到大一个个匹配不会更差，只会更好。</span><br></pre></td></tr></table></figure>
+<p><strong>解法：</strong><br>对S1和S2分别从小到大排序，用f[i][j]表示S1中的前i个数，与S2中的前j个数匹配（从j个数选i个数出来），显然有：<br/></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">f[i][j] &#x3D; inf(j &lt; i)</span><br><span class="line">f[0][0] &#x3D; 0</span><br><span class="line">f[i][j] &#x3D; min&#123;f[i-1][j-1]+|a[i]-b[j]|,f[i][j-1]&#125;,j&gt;&#x3D;i</span><br></pre></td></tr></table></figure>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;algorithm&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">#define inf 1&lt;&lt;30</span><br><span class="line">const int maxn &#x3D; 501;</span><br><span class="line">int f[maxn][maxn];</span><br><span class="line">int S1[maxn], S2[maxn];</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	int cases;</span><br><span class="line">	cin &gt;&gt; cases;</span><br><span class="line">	while (cases--) &#123;</span><br><span class="line">		int N, M;</span><br><span class="line">		cin &gt;&gt; N &gt;&gt; M;</span><br><span class="line">		for (int i &#x3D; 1; i &lt;&#x3D; N; ++i) &#123;</span><br><span class="line">			cin &gt;&gt; S1[i];</span><br><span class="line">		&#125;</span><br><span class="line">		for (int i &#x3D; 1; i &lt;&#x3D; M; ++i) &#123;</span><br><span class="line">			cin &gt;&gt; S2[i];</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		sort(S1+1, S1+N+1);</span><br><span class="line">		sort(S2+1, S2+M+1);</span><br><span class="line">		for (int i &#x3D; 0; i &lt;&#x3D; N; ++i) &#123;</span><br><span class="line">			for (int j &#x3D; 0; j &lt;&#x3D; M; ++j) &#123;</span><br><span class="line">				if (i &#x3D;&#x3D; 0 &amp;&amp; j &#x3D;&#x3D; 0)</span><br><span class="line">					f[i][j] &#x3D; 0;</span><br><span class="line">				else if (i &gt; j) &#123;</span><br><span class="line">					f[i][j] &#x3D; inf;</span><br><span class="line">				&#125;</span><br><span class="line">				else &#123;</span><br><span class="line">					f[i][j] &#x3D; inf;</span><br><span class="line">					if (i &gt; 0)</span><br><span class="line">						f[i][j] &#x3D; min(f[i][j], f[i-1][j-1]+abs(S1[i]-S2[j]));</span><br><span class="line">					if (j &gt; 0)</span><br><span class="line">						f[i][j] &#x3D; min(f[i][j], f[i][j-1]);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cout &lt;&lt; f[N][M] &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（未完待续）</p>
 ]]></content>
       <categories>
         <category>算法</category>
       </categories>
       <tags>
         <tag>算法</tag>
+        <tag>动态规划</tag>
         <tag>C++</tag>
-        <tag>贪心法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode-151 翻转字符串里的单词</title>
+    <url>/2020/04/10/LeetCode-151-%E7%BF%BB%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%87%8C%E7%9A%84%E5%8D%95%E8%AF%8D/</url>
+    <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">给定一个字符串，逐个翻转字符串中的每个单词。 </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入: &quot;the sky is blue&quot;</span><br><span class="line">输出: &quot;blue is sky the&quot;</span><br><span class="line"></span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入: &quot;  hello world!  &quot;</span><br><span class="line">输出: &quot;world! hello&quot;</span><br><span class="line">解释: 输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。</span><br><span class="line"></span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入: &quot;a good   example&quot;</span><br><span class="line">输出: &quot;example good a&quot;</span><br><span class="line">解释: 如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。</span><br></pre></td></tr></table></figure>
+<br/>
+
+<h2 id="📝思路"><a href="#📝思路" class="headerlink" title="📝思路"></a><strong>📝思路</strong></h2><p>毫不费力的思路：分割出单词-&gt;反向拼接<br/>可以用很多方式完成。Java支持库函数split()可以直接以空格为分隔符拆解，trim()筛掉前后空格，几行代码搞定；C++选手可以用stringstream或者手动实现分割拼接，据说此题的出题目的是考察双指针操作字符数组…<br/>我用的正则表达式辅助实现分割，vector容器实现反向拼接…总之题目不是很难，但是手动实现时难免踩到很多坑🤦‍♀️<br/><a href="https://leetcode-cn.com/problems/reverse-words-in-a-string/solution/fan-zhuan-zi-fu-chuan-li-de-dan-ci-by-leetcode-sol/" target="_blank" rel="noopener">官方思路和题解请戳此😃</a><br><br/></p>
+<h2 id="📝题解"><a href="#📝题解" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">string reverseWords(string s) &#123;</span><br><span class="line">    vector&lt;string&gt; words;</span><br><span class="line">    int len &#x3D; s.size();</span><br><span class="line">    string tmp &#x3D; &quot;&quot;;</span><br><span class="line">    regex reg(&quot;[ ]*&quot;);&#x2F;&#x2F;空或纯空格时为真</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len; ++i)&#123;</span><br><span class="line">        if (regex_match(tmp, reg))	tmp &#x3D; &quot;&quot;;</span><br><span class="line">        if (s[i] &#x3D;&#x3D; &#39; &#39; &amp;&amp; !regex_match(tmp, reg))&#123;</span><br><span class="line">            words.push_back(tmp);</span><br><span class="line">            tmp &#x3D; &quot;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            tmp +&#x3D; s[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!regex_match(tmp, reg))	words.push_back(tmp);</span><br><span class="line"></span><br><span class="line">    int len2 &#x3D; words.size();</span><br><span class="line">    if (len2 &#x3D;&#x3D; 0) return &quot;&quot;;</span><br><span class="line">    string temp &#x3D; &quot;&quot;;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len2-1; ++i)&#123;</span><br><span class="line">        temp +&#x3D; words.back();</span><br><span class="line">        temp +&#x3D; &quot; &quot;;</span><br><span class="line">        words.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">    temp +&#x3D; words.back();</span><br><span class="line">    return temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>C++</tag>
+        <tag>LeetCode</tag>
       </tags>
   </entry>
 </search>
