@@ -14,6 +14,24 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode-11 盛最多水的容器</title>
+    <url>/2020/04/18/LeetCode-11-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</span><br><span class="line"></span><br><span class="line">注意：你不能倾斜容器，且 n 的值至少为 2。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line"></span><br><span class="line">输入：[1,8,6,2,5,4,8,3,7]</span><br><span class="line">输出：49</span><br></pre></td></tr></table></figure>
+<br/>
+
+<h2 id="📝思路"><a href="#📝思路" class="headerlink" title="📝思路"></a><strong>📝思路</strong></h2><p>暴力的解法三两分钟写了出来，提交上去后超时了…超…时了…了…<br/>官方双指针思路：一开始两个指针一个指向开头一个指向结尾，此时容器的底是最大的，接下来随着指针向内移动，会造成容器的底变小，在这种情况下想要让容器盛水变多，就只有在容器的高上下功夫。 那我们该如何决策哪个指针移动呢？我们能够发现不管是左指针向右移动一位，还是右指针向左移动一位，容器的底都是一样的，都比原来减少了1。这种情况下我们<strong>想要让指针移动后的容器体积增大，就要使移动后的容器的高尽量大</strong>，所以我们选择指针所指的高较小的那个指针进行移动，这样我们就保留了容器较高的那条边，放弃了较小的那条边，以获得有更高的边的机会。<br/>🐣：（一开始我还觉得双指针还能咋用啊不就是跟暴力法一样控制个边而已吗打扰了原来有更进一步考虑（全个想无🙇‍♀️<br/><br/></p>
+<h2 id="📝题解"><a href="#📝题解" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;O(n^2)</span><br><span class="line"></span><br><span class="line">int maxArea(vector&lt;int&gt;&amp; height) &#123;</span><br><span class="line">    int len &#x3D; height.size();</span><br><span class="line">    int max &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len-1; ++i)&#123;</span><br><span class="line">        for (int j &#x3D; i+1; j &lt; len; ++j)&#123;</span><br><span class="line">            int sum &#x3D; (height[i] &lt; height[j] ? height[i]*(j-i) : height[j]*(j-i));</span><br><span class="line">            max &#x3D; max &gt; sum ? max : sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;O(n)</span><br><span class="line"></span><br><span class="line">int maxArea(vector&lt;int&gt;&amp; height) &#123;</span><br><span class="line">    int len &#x3D; height.size();</span><br><span class="line">    int max &#x3D; 0;</span><br><span class="line">    int left &#x3D; 0, right &#x3D; len-1;</span><br><span class="line">    while (left &lt; right)&#123;</span><br><span class="line">        int sum &#x3D; (height[left] &lt; height[right] ? height[left]*(right-left) : height[right]*(right-left));</span><br><span class="line">        max &#x3D; max &gt; sum ? max : sum;</span><br><span class="line">        if (height[left] &lt; height[right])   ++left;</span><br><span class="line">        else --right;</span><br><span class="line">    &#125;</span><br><span class="line">    return max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode-877 石子游戏</title>
     <url>/2020/04/15/LeetCode-877-%E7%9F%B3%E5%AD%90%E6%B8%B8%E6%88%8F/</url>
     <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">亚历克斯和李用几堆石子在做游戏。偶数堆石子排成一行，每堆都有正整数颗石子 piles[i] 。</span><br><span class="line"></span><br><span class="line">游戏以谁手中的石子最多来决出胜负。石子的总数是奇数，所以没有平局。</span><br><span class="line"></span><br><span class="line">亚历克斯和李轮流进行，亚历克斯先开始。 每回合，玩家从行的开始或结束处取走整堆石头。 这种情况一直持续到没有更多的石子堆为止，此时手中石子最多的玩家获胜。</span><br><span class="line"></span><br><span class="line">假设亚历克斯和李都发挥出最佳水平，当亚历克斯赢得比赛时返回 true ，当李赢得比赛时返回 false 。</span><br><span class="line"></span><br><span class="line">其中：</span><br><span class="line">· 2 &lt;&#x3D; piles.length &lt;&#x3D; 500</span><br><span class="line">· 1 &lt;&#x3D; piles[i] &lt;&#x3D; 500</span><br><span class="line"> </span><br><span class="line">示例：</span><br><span class="line"></span><br><span class="line">输入：[5,3,4,5]</span><br><span class="line">输出：true</span><br><span class="line">解释：</span><br><span class="line">亚历克斯先开始，只能拿前 5 颗或后 5 颗石子 。</span><br><span class="line">假设他取了前 5 颗，这一行就变成了 [3,4,5] 。</span><br><span class="line">如果李拿走前 3 颗，那么剩下的是 [4,5]，亚历克斯拿走后 5 颗赢得 10 分。</span><br><span class="line">如果李拿走后 5 颗，那么剩下的是 [3,4]，亚历克斯拿走后 4 颗赢得 9 分。</span><br><span class="line">这表明，取前 5 颗石子对亚历克斯来说是一个胜利的举动，所以我们返回 true 。</span><br></pre></td></tr></table></figure>
@@ -29,6 +47,7 @@
       <tags>
         <tag>C++</tag>
         <tag>LeetCode</tag>
+        <tag>算法</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
