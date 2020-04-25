@@ -441,4 +441,44 @@
         <tag>算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title>LeetCode-1541 数组中重复的数字</title>
+    <url>/2020/04/25/LeetCode-1541-%E6%95%B0%E7%BB%84%E4%B8%AD%E9%87%8D%E5%A4%8D%E7%9A%84%E6%95%B0%E5%AD%97/</url>
+    <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。</span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：</span><br><span class="line">[2, 3, 1, 0, 2, 5, 3]</span><br><span class="line">输出：2 或 3 </span><br><span class="line"></span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：</span><br><span class="line">[3, 1, 2, 3]</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
+<br/>
+
+<h2 id="📝思路"><a href="#📝思路" class="headerlink" title="📝思路"></a><strong>📝思路</strong></h2><p>与<a href="https://baike.baidu.com/item/%E6%8A%BD%E5%B1%89%E5%8E%9F%E7%90%86/233776?fromtitle=%E9%B8%BD%E5%B7%A2%E5%8E%9F%E7%90%86&fromid=731656&fr=aladdin" target="_blank" rel="noopener">抽屉原理</a>同理，即如果没有重复数字，那么正常排序后，数字i应该在下标为i的位置。因为出现的元素值必然小于数组长度，所以可以把见到的元素放到索引的位置，如果交换时，发现索引处已存在该元素，则重复。<br/><br/></p>
+<h2 id="📝题解"><a href="#📝题解" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int findRepeatNumber(vector&lt;int&gt;&amp; nums) &#123;</span><br><span class="line">    int len &#x3D; nums.size();</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len; ++i)&#123;</span><br><span class="line">        while (i !&#x3D; nums[i])&#123;</span><br><span class="line">            if (nums[i] &#x3D;&#x3D; nums[nums[i]])   return nums[i];</span><br><span class="line">            int temp &#x3D; nums[i];</span><br><span class="line">            nums[i] &#x3D; nums[temp];</span><br><span class="line">            nums[temp] &#x3D; temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>LeetCode</tag>
+        <tag>一些奇奇怪怪的原理/轮子</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>手写，不在怕的；轮子，没想到的。</title>
+    <url>/2020/04/25/%E6%89%8B%E5%86%99%EF%BC%8C%E4%B8%8D%E5%9C%A8%E6%80%95%E7%9A%84%EF%BC%9B%E8%BD%AE%E5%AD%90%EF%BC%8C%E6%B2%A1%E6%83%B3%E5%88%B0%E7%9A%84%E3%80%82/</url>
+    <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">请实现一个函数，把字符串 s 中的每个空格替换成&quot;%20&quot;。</span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：s &#x3D; &quot;We are happy.&quot;</span><br><span class="line">输出：&quot;We%20are%20happy.&quot;</span><br></pre></td></tr></table></figure>
+<br/>
+
+<h2 id="📝题解"><a href="#📝题解" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;轮子</span><br><span class="line"></span><br><span class="line">string replaceSpace(string s) &#123;</span><br><span class="line">    return s.replace(&quot; &quot;,&quot;%20&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;手写</span><br><span class="line"></span><br><span class="line">string replaceSpace(string s) &#123;</span><br><span class="line">    int len &#x3D; s.size();</span><br><span class="line">    string result &#x3D; &quot;&quot;;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len; ++i)&#123;</span><br><span class="line">        if (s[i] &#x3D;&#x3D; &#39; &#39;)    result +&#x3D; &quot;%20&quot;;</span><br><span class="line">        else    result +&#x3D; s[i];</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<br/>
+
+<hr>
+<h2 id="📝题目-1"><a href="#📝题目-1" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。</span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：head &#x3D; [1,3,2]</span><br><span class="line">输出：[2,3,1]</span><br></pre></td></tr></table></figure>
+<br/>
+
+<h2 id="📝题解-1"><a href="#📝题解-1" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;轮子</span><br><span class="line"></span><br><span class="line">vector&lt;int&gt; reversePrint(ListNode* head) &#123;</span><br><span class="line">    vector&lt;int&gt; result;</span><br><span class="line">    ListNode* temp &#x3D; head;</span><br><span class="line">    while (temp)&#123;</span><br><span class="line">        result.push_back(temp-&gt;val);</span><br><span class="line">        temp &#x3D; temp-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;指的是下面这一步</span><br><span class="line">    reverse(result.begin(), result.end());</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;手写</span><br><span class="line"></span><br><span class="line">vector&lt;int&gt; reversePrint(ListNode* head) &#123;</span><br><span class="line">    vector&lt;int&gt; result, tmp;</span><br><span class="line">    ListNode* temp &#x3D; head;</span><br><span class="line">    int len &#x3D; 0;</span><br><span class="line">    while (temp)&#123;</span><br><span class="line">        tmp.push_back(temp-&gt;val);</span><br><span class="line">        ++len;</span><br><span class="line">        temp &#x3D; temp-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;指的是下面这一步</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len; ++i)&#123;</span><br><span class="line">        result.push_back(tmp.back());</span><br><span class="line">        tmp.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>一些奇奇怪怪得到原理/轮子</tag>
+      </tags>
+  </entry>
 </search>
