@@ -566,4 +566,34 @@
         <tag>LeetCode</tag>
       </tags>
   </entry>
+  <entry>
+    <title>LeetCode-892 三维形体的表面积</title>
+    <url>/2020/04/27/LeetCode-892-%E4%B8%89%E7%BB%B4%E5%BD%A2%E4%BD%93%E7%9A%84%E8%A1%A8%E9%9D%A2%E7%A7%AF/</url>
+    <content><![CDATA[<h2 id="📝题目"><a href="#📝题目" class="headerlink" title="📝题目"></a><strong>📝题目</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">在 N * N 的网格上，我们放置一些 1 * 1 * 1  的立方体。</span><br><span class="line"></span><br><span class="line">每个值 v &#x3D; grid[i][j] 表示 v 个正方体叠放在对应单元格 (i, j) 上。</span><br><span class="line"></span><br><span class="line">请你返回最终形体的表面积。 </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：[[2]]</span><br><span class="line">输出：10</span><br><span class="line"></span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：[[1,2],[3,4]]</span><br><span class="line">输出：34</span><br><span class="line"></span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入：[[1,0],[0,2]]</span><br><span class="line">输出：16</span><br><span class="line"></span><br><span class="line">示例 4：</span><br><span class="line"></span><br><span class="line">输入：[[1,1,1],[1,0,1],[1,1,1]]</span><br><span class="line">输出：32</span><br><span class="line"></span><br><span class="line">示例 5：</span><br><span class="line"></span><br><span class="line">输入：[[2,2,2],[2,1,2],[2,2,2]]</span><br><span class="line">输出：46 </span><br><span class="line"></span><br><span class="line">限制：</span><br><span class="line"></span><br><span class="line">· 1 &lt;&#x3D; N &lt;&#x3D; 50</span><br><span class="line">· 0 &lt;&#x3D; grid[i][j] &lt;&#x3D; 50</span><br></pre></td></tr></table></figure>
+<br/>
+
+<h2 id="📝思路"><a href="#📝思路" class="headerlink" title="📝思路"></a><strong>📝思路</strong></h2><p>想法一：<strong>做加法</strong>。<br/>我们可以将单元格 (i, j) 上堆叠的 v 个正方体看成一个高度为 v 的柱子，然后分别计算每个柱子的表面积。<br/>首先，v &gt; 0 的话，柱子顶部、底部的表面积都是 1。<br/>然后是上、下、左、右四个侧面的表面积。以左侧的表面积为例：</p>
+<ul>
+<li>如果柱子位于网格左边缘，左侧没有其他柱子，那么左侧表面积为 v；</li>
+<li>如果柱子比左边的柱子矮，那么左侧露不出来，表面积为 0；</li>
+<li>如果柱子比左边的柱子高，假设左边柱子高度为 v’，那么左边露出来的表面积为 v - v’。</li>
+</ul>
+<p>其余的三个侧面以此类推。<br/><br>想法二：<strong>做减法</strong>。<br/>先计算全部的表面积，然后再减去重叠的部分。<br/>假设一共有 n 个立方体，每个立方体都有六个面，那么总的表面积应该是 6n。但是这些正方体堆叠在了一起，需要减掉一些因为堆叠而露不出来的表面积。每一对相邻的立方体接触在一起，都会让表面积减少 2。假设一共有 e 对相接触的立方体，即有 e 个接触面，表面积就会减少 2e。那么，最终的表面积就应该是 6n - 2e。<br/>那么如何计算立方体的接触面呢？很简单，我们还是把每个单元格上堆叠的 v 个立方体看成一个柱子。立方体的接触面可以分为柱子内部和柱子之间的接触面：</p>
+<ul>
+<li>v 个立方体的柱子内部，有 v - 1 个接触面</li>
+<li>高度分别为 v、w 的两个立方体之间的接触面为 min(v, w)。</li>
+</ul>
+<p>🐣：Sicily线上赛有一道几乎一样的！！但当时我竟死磕用三视图去解🤦<br/><br/></p>
+<h2 id="📝题解"><a href="#📝题解" class="headerlink" title="📝题解"></a><strong>📝题解</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;加法</span><br><span class="line"></span><br><span class="line">int surfaceArea(vector&lt;vector&lt;int&gt;&gt;&amp; grid)&#123;</span><br><span class="line">    int n &#x3D; grid.size();</span><br><span class="line">    int result &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; n; ++i)&#123;</span><br><span class="line">        for (int j &#x3D; 0; j &lt; n; ++j)&#123;</span><br><span class="line">            &#x2F;&#x2F;上下</span><br><span class="line">            if (grid[i][j]) result +&#x3D; 2;</span><br><span class="line">            &#x2F;&#x2F;左右</span><br><span class="line">            if (j &#x3D;&#x3D; 0) result +&#x3D; grid[i][j];</span><br><span class="line">            if (j &#x3D;&#x3D; n-1) result +&#x3D; grid[i][j];</span><br><span class="line">            if (j &gt; 0 &amp;&amp; grid[i][j] &gt; grid[i][j-1]) result +&#x3D; (grid[i][j] - grid[i][j-1]);</span><br><span class="line">            if (j &lt; n-1 &amp;&amp; grid[i][j] &gt; grid[i][j+1])   result +&#x3D; (grid[i][j] - grid[i][j+1]);</span><br><span class="line">            &#x2F;&#x2F;前后</span><br><span class="line">            if (i &#x3D;&#x3D; 0) result +&#x3D; grid[i][j];</span><br><span class="line">            if (i &#x3D;&#x3D; n-1) result +&#x3D; grid[i][j];</span><br><span class="line">            if (i &gt; 0 &amp;&amp; grid[i][j] &gt; grid[i-1][j]) result +&#x3D; (grid[i][j] - grid[i-1][j]);</span><br><span class="line">            if (i &lt; n-1 &amp;&amp; grid[i][j] &gt; grid[i+1][j])   result +&#x3D; (grid[i][j] - grid[i+1][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;减法</span><br><span class="line"></span><br><span class="line">int surfaceArea(vector&lt;vector&lt;int&gt;&gt;&amp; grid)&#123;</span><br><span class="line">    int n &#x3D; grid.size();</span><br><span class="line">    int result &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; n; ++i)&#123;</span><br><span class="line">        for (int j &#x3D; 0; j &lt; n; ++j)&#123;</span><br><span class="line">            if (grid[i][j]) result +&#x3D; 4*grid[i][j]+2;</span><br><span class="line">            if (i &lt; n-1)</span><br><span class="line">                result -&#x3D; 2*min(grid[i][j], grid[i+1][j]);</span><br><span class="line">            if (j &lt; n-1)</span><br><span class="line">                result -&#x3D; 2*min(grid[i][j], grid[i][j+1]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
 </search>
