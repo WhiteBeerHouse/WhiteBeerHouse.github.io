@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>操作系统原理的扩展知识</title>
+      <link href="/2020/06/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86/"/>
+      <url>/2020/06/25/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86/</url>
+      
+        <content type="html"><![CDATA[<h3 id="因为做作业需要查阅，也为了日后再学习，记录一些拓展内容🐾"><a href="#因为做作业需要查阅，也为了日后再学习，记录一些拓展内容🐾" class="headerlink" title="因为做作业需要查阅，也为了日后再学习，记录一些拓展内容🐾"></a>因为做作业需要查阅，也为了日后再学习，记录一些拓展内容🐾</h3><p><a href="https://cloud.tencent.com/developer/article/1499667" target="_blank" rel="noopener">彻底解决分布式系统一致性问题整理(下)</a><br><a href="https://www.cnblogs.com/liangdejiu/articles/11255201.html" target="_blank" rel="noopener">分布式系统如何保证数据一致性</a><br><a href="https://www.cnblogs.com/snow826520/p/8574824.html" target="_blank" rel="noopener">CPU中的cache结构以及cache一致性</a><br><a href="https://wenku.baidu.com/view/10de194fe518964bcf847c3b.html" target="_blank" rel="noopener">内存/存储保护的重要性及实现</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 操作系统 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 操作系统理论 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>跨交换机VLAN通信（资料）</title>
+      <link href="/2020/06/09/%E8%B7%A8%E4%BA%A4%E6%8D%A2%E6%9C%BAVLAN%E9%80%9A%E4%BF%A1%EF%BC%88%E8%B5%84%E6%96%99%EF%BC%89/"/>
+      <url>/2020/06/09/%E8%B7%A8%E4%BA%A4%E6%8D%A2%E6%9C%BAVLAN%E9%80%9A%E4%BF%A1%EF%BC%88%E8%B5%84%E6%96%99%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<h4 id="跨交换机实现VLAN的相关资料。"><a href="#跨交换机实现VLAN的相关资料。" class="headerlink" title="跨交换机实现VLAN的相关资料。"></a>跨交换机实现VLAN的相关资料。</h4><p><strong>·</strong> <a href="https://wenku.baidu.com/view/ea05cf943b3567ec112d8a12.html" target="_blank" rel="noopener">思科交换机接口的三种模式</a><br><strong>·</strong> <a href="https://www.cnblogs.com/qiyeboy/p/5930573.html" target="_blank" rel="noopener">交换机地址表与MAC泛洪攻击</a><br><strong>·</strong> <a href="https://max.book118.com/html/2019/0128/8076051051002004.shtm" target="_blank" rel="noopener">前人的参考报告</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 计算机网络 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>动态规划（二）</title>
       <link href="/2020/05/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
       <url>/2020/05/30/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
